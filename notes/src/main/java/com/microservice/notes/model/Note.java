@@ -5,64 +5,58 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "notes")
 public class Note {
+	
+	@Id
+	private String id;
+	
+	private String patId;
+	private String patient;
+	private String note;
 
-    @Id
-    private String id;
+	public Note() {
+	}
 
-    private String patId;
-    private String patient;
-    private String note;
+	public Note(String patId, String patient, String note) {
+		this.patId = patId;
+		this.patient = patient;
+		this.note = note;
+	}
 
+	public String getId() {
+		return id;
+	}
 
-    public Note() {
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public Note(String patId, String patient, String note) {
-        this.patId = patId;
-        this.patient = patient;
-        this.note = note;
-    }
+	public String getPatId() {
+		return patId;
+	}
 
+	public void setPatId(String patId) {
+		this.patId = patId;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getPatient() {
+		return patient;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setPatient(String patient) {
+		this.patient = patient;
+	}
 
-    public String getPatId() {
-        return patId;
-    }
+	public String getNote() {
+		return note;
+	}
 
-    public void setPatId(String patId) {
-        this.patId = patId;
-    }
+	public void setNote(String note) {
+		this.note = note;
+	}
 
-    public String getPatient() {
-        return patient;
-    }
-
-    public void setPatient(String patient) {
-        this.patient = patient;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    @Override
-    public String toString() {
-        return "PatientNote{" +
-                "id='" + id + '\'' +
-                ", patId='" + patId + '\'' +
-                ", patient='" + patient + '\'' +
-                ", note='" + note + '\'' +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "PatientNote{" + "id='" + id + '\'' + ", patId='" + patId + '\'' + ", patient='" + patient + '\''
+				+ ", note='" + note + '\'' + '}';
+	}
 }
