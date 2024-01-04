@@ -33,18 +33,17 @@ public class NoteController {
 		return noteService.getAllNotes();
 	}
 
-	@GetMapping("/{patId}")
-	public List<Note> getNotesByPatId(@PathVariable String patId) {
-		return noteService.getNotesByPatId(patId);
-
+	@GetMapping("/{param}")
+	public ResponseEntity<?> getNoteByIdOrByPatId(@PathVariable String param) {
+	    if (param.length() < 15) {
+	        List<Note> notes = noteService.getNotesByPatId(param);
+	        return new ResponseEntity<>(notes, HttpStatus.OK);
+	    } else {
+	        Optional<Note> note = noteService.getNoteById(param);
+	        return note.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+	                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+	    }
 	}
-/*
-	@GetMapping("/{id}")
-	public ResponseEntity<Note> getNoteById(@PathVariable String id) {
-		Optional<Note> note = noteService.getNoteById(id);
-		return note.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-				.orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-	}*/
 
 	@PostMapping
 	public ResponseEntity<Note> saveNote(@RequestBody Note note) {

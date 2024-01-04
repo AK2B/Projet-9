@@ -1,5 +1,6 @@
 package com.microservice.notes.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,9 +25,18 @@ public class NoteService {
     }
     
     public List<Note> getNotesByPatId(String patId) {
-        return noteRepository.findAllByPatId(patId);
-    }
 
+        List<Note> allNotes = noteRepository.findAll();
+
+        List<Note> notesByPatId = new ArrayList<>();
+        for (Note note : allNotes) {
+            if (note.getPatId().equals(patId)) {
+                notesByPatId.add(note);
+            }
+        }
+        return notesByPatId;
+    }
+    
     public Optional<Note> getNoteById(String id) {
         return noteRepository.findById(id);
     }

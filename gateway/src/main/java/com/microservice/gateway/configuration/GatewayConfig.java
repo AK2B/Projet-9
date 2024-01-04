@@ -12,13 +12,13 @@ public class GatewayConfig {
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
             .route("ui-service", r -> r.path("/ui/**")
-                .uri("http://localhost:8080"))  // UI service runs on port 8083
+                .uri("http://localhost:8080"))  
             .route("patient-service", r -> r.path("/patients/**")
-                .uri("http://localhost:8082"))  // patient-service runs on port 8080
+                .uri("http://localhost:8082"))  
             .route("notes-service", r -> r.path("/notes/**")
-                .uri("http://localhost:8083"))    // notes-service runs on port 8081
+                .uri("http://localhost:8083"))    
             .route("assessment-service", r -> r.path("/assessment/**")
-                .uri("http://localhost:8084"))  // assessment-service runs on port 8082
+                .uri("http://localhost:8084")) 
             .build();
     }
 }

@@ -1,5 +1,7 @@
 package com.microservice.APIpatient.model;
 
+import java.time.LocalDate;
+
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -10,7 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "patient")
@@ -22,20 +24,20 @@ public class Patient {
 	@Column(name = "id")
 	private Long id;
 
-	@NotBlank(message = "Le champ ne peut pas être null.")
+	@NotNull(message = "Le champ ne peut pas être null.")
 	@Column(name = "last_name")
 	private String lastName;
 
-	@NotBlank(message = "Le champ ne peut pas être null.")
+	@NotNull(message = "Le champ ne peut pas être null.")
 	@Column(name = "first_name")
 	private String firstName;
 
-	@NotBlank(message = "Le champ ne peut pas être null.")
+	@NotNull(message = "Le champ ne peut pas être null.")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "birthday")
-	private String birthday;
+	private LocalDate birthday;
 	
-	@NotBlank(message = "Le champ ne peut pas être null.")
+	@NotNull(message = "Le champ ne peut pas être null.")
 	@Column(name = "gender")
 	private String gender;
 	
@@ -69,11 +71,11 @@ public class Patient {
 		this.firstName = firstName;
 	}
 
-	public String getBirthday() {
+	public LocalDate getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(String birthday) {
+	public void setBirthday(LocalDate birthday) {
 		this.birthday = birthday;
 	}
 

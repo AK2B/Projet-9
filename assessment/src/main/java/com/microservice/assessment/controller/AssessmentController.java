@@ -1,6 +1,7 @@
 package com.microservice.assessment.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +28,11 @@ public class AssessmentController {
     }
 
     @GetMapping
+    public ResponseEntity<String> assessment() {
+    	return ResponseEntity.ok("bonjour");
+    }
+    
+    @GetMapping("/{patientId}")
     public AssessmentResponse assess(@RequestParam String patientId) {
         // Retrieve patient data
         PatientDto patient = webClientBuilder.build()

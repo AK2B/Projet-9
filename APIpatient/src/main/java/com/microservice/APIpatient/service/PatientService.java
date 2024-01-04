@@ -1,6 +1,7 @@
 package com.microservice.APIpatient.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,13 +33,18 @@ public class PatientService {
 	}
 
 	public Patient updatePatient(Long id, Patient updatedPatient) {
-		Patient existingPatient = patientRepository.findById(id).orElse(null);
-		if (existingPatient != null) {
-			existingPatient.setFirstName(updatedPatient.getFirstName());
-			existingPatient.setLastName(updatedPatient.getLastName());
-			patientRepository.save(existingPatient);
-		}
-		return existingPatient;
+	    Optional<Patient> optionalExistingPatient = patientRepository.findById(id);
+
+	    return optionalExistingPatient.map(existingPatient -> {
+	        existingPatient.setFirstName(updatedPatient.getFirstName());
+	        existingPatient.setLastName(updatedPatient.getLastName());
+	        existingPatient.setBirthday(updatedPatient.getBirthday());
+	        existingPatient.setGender(updatedPatient.getGender());
+	        existingPatient.setAddress(updatedPatient.getAddress());
+	        existingPatient.setPhoneNumber(updatedPatient.getPhoneNumber());
+
+	        return patientRepository.save(existingPatient);
+	    }).orElse(null);
 	}
 
 	public void deletePatient(Long id) {

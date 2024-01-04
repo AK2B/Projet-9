@@ -51,14 +51,8 @@ public class PatientController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestBody Patient updatedPatient) {
-        Patient existingPatient = patientService.getPatientById(id);
-        if (existingPatient != null) {
-            updatedPatient.setId(id);
-            Patient updated = patientService.updatePatient(id, updatedPatient);
-            return ResponseEntity.ok(updated);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Patient updated = patientService.updatePatient(id, updatedPatient);
+        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
