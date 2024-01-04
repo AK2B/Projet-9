@@ -12,13 +12,9 @@ import com.microservice.notes.repository.NoteRepository;
 
 @Service
 public class NoteService {
-
-    private final NoteRepository noteRepository;
-
-    @Autowired
-    public NoteService(NoteRepository noteRepository) {
-        this.noteRepository = noteRepository;
-    }
+	
+	@Autowired
+    private NoteRepository noteRepository;
 
     public List<Note> getAllNotes() {
         return noteRepository.findAll();
@@ -26,7 +22,7 @@ public class NoteService {
     
     public List<Note> getNotesByPatId(String patId) {
 
-        List<Note> allNotes = noteRepository.findAll();
+        List<Note> allNotes = getAllNotes();
 
         List<Note> notesByPatId = new ArrayList<>();
         for (Note note : allNotes) {

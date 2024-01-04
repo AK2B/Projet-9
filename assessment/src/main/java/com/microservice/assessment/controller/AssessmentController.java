@@ -1,10 +1,14 @@
 package com.microservice.assessment.controller;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -14,49 +18,42 @@ import com.microservice.assessment.model.NotesDto;
 import com.microservice.assessment.model.PatientDto;
 import com.microservice.assessment.service.AssessmentService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/assessment")
+@RequiredArgsConstructor
 public class AssessmentController {
 
-    private final AssessmentService assessmentService;
-    private final WebClient.Builder webClientBuilder;
+	private static final Logger logger = LoggerFactory.getLogger(AssessmentController.class);
 
-    @Autowired
-    public AssessmentController(AssessmentService assessmentService, WebClient.Builder webClientBuilder) {
-        this.assessmentService = assessmentService;
-        this.webClientBuilder = webClientBuilder;
+	@Autowired
+    private AssessmentService assessmentService;
+    private final WebClient webClient = WebClient.create();
+
+    @GetMapping("/greeting")
+    public ResponseEntity<String> greeting() {
+        return ResponseEntity.ok(("Hello from the AssessmentController!"));
     }
 
-    @GetMapping
-    public ResponseEntity<String> assessment() {
-    	return ResponseEntity.ok("bonjour");
-    }
-    
     @GetMapping("/{patientId}")
-    public AssessmentResponse assess(@RequestParam String patientId) {
-        // Retrieve patient data
-        PatientDto patient = webClientBuilder.build()
-                .get()
-                .uri("http://localhost:8082/patients/{id}", patientId)
+    public AssessmentResponse assess(@PathVariable String patientId) {
+        PatientDto patient = webClient.get()
+                .uri("http://localhost:8081/patients/{id}", patientId)
                 .retrieve()
                 .bodyToMono(PatientDto.class)
-                .block();  // Note: blocking operation, consider using reactive programming
+                .block();
 
-        // Retrieve patient notes
-        NotesDto notes = webClientBuilder.build()
-                .get()
-                .uri("http://localhost:8083/notes/{id}", patientId)
+        List<NotesDto> notes = webClient.get()
+                .uri("http://localhost:8081/notes/{id}", patientId)
                 .retrieve()
-                .bodyToMono(NotesDto.class)
-                .block();  // Note: blocking operation, consider using reactive programming
-
-        // Calculate the assessment
+                .bodyToFlux(NotesDto.class)
+                .collectList()
+                .block();
+        
         Assessment assessment = assessmentService.assess(patient, notes);
 
-        // Create the response
-        AssessmentResponse response = new AssessmentResponse();
-        response.setLevel(assessment.getLevel());
-
+        AssessmentResponse response = new AssessmentResponse(assessment);
         return response;
     }
 }

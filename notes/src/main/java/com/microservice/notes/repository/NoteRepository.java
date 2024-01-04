@@ -8,6 +8,5 @@ import com.microservice.notes.model.Note;
 @Repository
 public interface NoteRepository extends MongoRepository<Note, String> {
 
-
 }
 

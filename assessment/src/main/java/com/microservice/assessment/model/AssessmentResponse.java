@@ -7,8 +7,8 @@ public class AssessmentResponse {
     public AssessmentResponse() {
     }
 
-    public AssessmentResponse(AssessmentLevel level) {
-        this.level = level;
+    public AssessmentResponse(Assessment assessment) {
+        this.level = assessment.getLevel();
     }
 
     public AssessmentLevel getLevel() {
