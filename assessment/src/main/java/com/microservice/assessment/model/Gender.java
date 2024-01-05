@@ -1,5 +1,17 @@
 package com.microservice.assessment.model;
 
+/**
+ * Enumeration representing genders.
+ */
 public enum Gender {
-    M, F
+    
+    /**
+     * Male gender.
+     */
+    M,
+    
+    /**
+     * Female gender.
+     */
+    F
 }

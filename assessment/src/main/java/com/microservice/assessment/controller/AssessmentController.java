@@ -2,10 +2,7 @@ package com.microservice.assessment.controller;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,24 +15,24 @@ import com.microservice.assessment.model.NotesDto;
 import com.microservice.assessment.model.PatientDto;
 import com.microservice.assessment.service.AssessmentService;
 
-import lombok.RequiredArgsConstructor;
-
+/**
+ * Controller for handling assessment-related HTTP requests.
+ */
 @RestController
 @RequestMapping("/assessment")
-@RequiredArgsConstructor
 public class AssessmentController {
 
-	private static final Logger logger = LoggerFactory.getLogger(AssessmentController.class);
-
-	@Autowired
+    @Autowired
     private AssessmentService assessmentService;
+    
     private final WebClient webClient = WebClient.create();
 
-    @GetMapping("/greeting")
-    public ResponseEntity<String> greeting() {
-        return ResponseEntity.ok(("Hello from the AssessmentController!"));
-    }
-
+    /**
+     * Endpoint for assessing the diabetes risk of a patient.
+     *
+     * @param patientId The unique identifier of the patient.
+     * @return The assessment response.
+     */
     @GetMapping("/{patientId}")
     public AssessmentResponse assess(@PathVariable String patientId) {
         PatientDto patient = webClient.get()
@@ -50,10 +47,11 @@ public class AssessmentController {
                 .bodyToFlux(NotesDto.class)
                 .collectList()
                 .block();
-        
+
         Assessment assessment = assessmentService.assess(patient, notes);
 
         AssessmentResponse response = new AssessmentResponse(assessment);
+
         return response;
     }
 }

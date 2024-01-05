@@ -3,90 +3,96 @@ package com.microservice.assessment.model;
 import java.time.LocalDate;
 import java.time.Period;
 
+/**
+ * Data Transfer Object representing patient details.
+ */
 public class PatientDto {
 
-    private Long id;
+	private Long id;
+	private String last_name;
+	private String first_name;
+	private String birthday;
+	private String gender;
+	private AssessmentLevel level;
 
-    private String last_name;
+	public PatientDto() {
+	}
 
-    private String first_name;
+	/**
+	 * Parameterized constructor for PatientDto.
+	 *
+	 * @param id         Unique identifier for the patient.
+	 * @param last_name  Last name of the patient.
+	 * @param first_name First name of the patient.
+	 * @param birthday   Birthday of the patient.
+	 * @param gender     Gender of the patient.
+	 * @param level      Assessment level of the patient.
+	 */
+	public PatientDto(Long id, String last_name, String first_name, String birthday, String gender,
+			AssessmentLevel level) {
+		this.id = id;
+		this.last_name = last_name;
+		this.first_name = first_name;
+		this.birthday = birthday;
+		this.gender = gender;
+		this.level = level;
+	}
 
-    private String birthday;
+	public Long getId() {
+		return id;
+	}
 
-    private String gender;
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    private AssessmentLevel level;
+	public String getLastName() {
+		return last_name;
+	}
 
-    public PatientDto() {
-    }
+	public void setLastName(String last_name) {
+		this.last_name = last_name;
+	}
 
-    public PatientDto(Long id, String last_name, String first_name, String birthday, String gender, AssessmentLevel level) {
-        this.id = id;
-        this.last_name = last_name;
-        this.first_name = first_name;
-        this.birthday = birthday;
-        this.gender = gender;
-        this.level = level;
-    }
+	public String getFirstName() {
+		return first_name;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setFirstName(String first_name) {
+		this.first_name = first_name;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public String getBirthday() {
+		return birthday;
+	}
 
-    public String getLastName() {
-        return last_name;
-    }
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
 
-    public void setLastName(String last_name) {
-        this.last_name = last_name;
-    }
+	public String getGender() {
+		return gender;
+	}
 
-    public String getFirstName() {
-        return first_name;
-    }
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
 
-    public void setFirstName(String first_name) {
-        this.first_name = first_name;
-    }
+	public AssessmentLevel getLevel() {
+		return level;
+	}
 
-    public String getBirthday() {
-        return birthday;
-    }
+	public void setLevel(AssessmentLevel level) {
+		this.level = level;
+	}
 
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
+	public int getAge() {
+		if (birthday != null) {
+			LocalDate birthDate = LocalDate.parse(birthday);
+			LocalDate currentDate = LocalDate.now();
+			return Period.between(birthDate, currentDate).getYears();
+		}
+		return 0;
+	}
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public AssessmentLevel getLevel() {
-        return level;
-    }
-
-    public void setLevel(AssessmentLevel level) {
-        this.level = level;
-    }
-    
-    
-    public int getAge() {
-        if (birthday != null) {
-            LocalDate birthDate = LocalDate.parse(birthday);
-            LocalDate currentDate = LocalDate.now();
-            return Period.between(birthDate, currentDate).getYears();
-        }
-        return 0;
-    }
-    
-    
 }
-
