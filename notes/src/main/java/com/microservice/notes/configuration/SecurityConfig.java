@@ -1,4 +1,4 @@
-package com.microservice.APIpatient.configuration;
+package com.microservice.notes.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

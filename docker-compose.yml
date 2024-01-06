@@ -5,7 +5,23 @@ services:
     build: ./apipatient
     restart: always
     ports:
-      - "8080:8080"
+      - "8082:8082"
+    depends_on:
+      - gateway
+
+  notes:
+    build: ./notes
+    restart: always
+    ports:
+      - "8083:8083"
+    depends_on:
+      - gateway
+
+  assessment:
+    build: ./assessment
+    restart: always
+    ports:
+      - "8084:8084"
     depends_on:
       - gateway
 
@@ -13,12 +29,12 @@ services:
     build: ./gateway
     restart: always
     ports:
-      - "8081:8080"
+      - "8081:8081"
 
   ui:
     build: ./ui
     restart: always
     ports:
-      - "3000:3000"
+      - "8080:8080"
     depends_on:
       - apipatient
