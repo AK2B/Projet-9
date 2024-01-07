@@ -52,6 +52,7 @@ public class ListController {
 
 		webClient.post()
 				.uri("http://localhost:8081/patients")
+				.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
 				.body(Mono.just(patient), PatientDetailsDto.class)
 				.retrieve()
 				.bodyToMono(PatientDetailsDto.class)
@@ -85,7 +86,7 @@ public class ListController {
 
 	        webClient
 	        		.put().uri("http://localhost:8081/patients/{id}", patient.getId())
-	        		
+					.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
 	                .body(Mono.just(patient), PatientDetailsDto.class)
 	                .retrieve()
 	                .bodyToMono(PatientDetailsDto.class)

@@ -57,6 +57,7 @@ public class NoteListController {
 		
 		webClient.post()				
                 .uri("http://localhost:8081/notes")
+				.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
                 .body(Mono.just(noteDto), NotesDetailsDto.class)
                 .retrieve()
                 .bodyToMono(NotesDetailsDto.class)
