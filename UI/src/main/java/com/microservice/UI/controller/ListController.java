@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import com.microservice.UI.model.PatientDetailsDto;
 
@@ -80,20 +83,20 @@ public class ListController {
 		return "patient/update";
 	}
 
-	 @PostMapping("/update")
-	    public String updatePatient(@ModelAttribute("patient") PatientDetailsDto patient, Model model) {
-	        logger.info("Updating patient with ID: {}", patient.getId());
+	@PostMapping("/update")
+    public String updatePatient(@ModelAttribute("patient") PatientDetailsDto patient, Model model) {
+        logger.info("Updating patient with ID: {}", patient.getId());
 
-	        webClient
-	        		.put().uri("http://localhost:8081/patients/{id}", patient.getId())
-					.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
-	                .body(Mono.just(patient), PatientDetailsDto.class)
-	                .retrieve()
-	                .bodyToMono(PatientDetailsDto.class)
-	                .doOnSuccess(updatedPatient -> logger.info("Patient updated successfully: {}", updatedPatient))
-	                .block();
+        webClient
+        		.put().uri("http://localhost:8081/patients/{id}", patient.getId())
+				.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
+                .body(Mono.just(patient), PatientDetailsDto.class)
+                .retrieve()
+                .bodyToMono(PatientDetailsDto.class)
+                .doOnSuccess(updatedPatient -> logger.info("Patient updated successfully: {}", updatedPatient))
+                .block();
 
-		return "redirect:/patient/list";
-	}
+	return "redirect:/patient/list";
+}
 
 }

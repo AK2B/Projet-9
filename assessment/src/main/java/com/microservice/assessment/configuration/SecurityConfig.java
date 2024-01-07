@@ -27,7 +27,8 @@ public class SecurityConfig {
 			.anyRequest().authenticated()
 		)
 		.httpBasic(Customizer.withDefaults())
-		.formLogin(Customizer.withDefaults());
+		.formLogin(Customizer.withDefaults())
+		.csrf().disable();
 
 	return http.build();
 }
@@ -43,12 +44,14 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public UserDetailsService userDetailsService() {
-		UserDetails userDetails = User.withDefaultPasswordEncoder().username("user").password("password").roles("USER")
-				.build();
-
-		return new InMemoryUserDetailsManager(userDetails);
-	}
+	  public InMemoryUserDetailsManager userDetailsService() {
+	    UserDetails user = User
+	        .withUsername("user")
+	        .password(passwordEncoder().encode("password"))
+	        .roles("USER_ROLE")
+	        .build();
+	    return new InMemoryUserDetailsManager(user);
+	  }
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
