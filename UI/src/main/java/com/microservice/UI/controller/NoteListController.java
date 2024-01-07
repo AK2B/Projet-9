@@ -25,6 +25,7 @@ public class NoteListController {
 	public String listPatient(@PathVariable String patientId, Model model) {
 		List<NotesDetailsDto> notes = webClient.get()
 				.uri("http://localhost:8081/notes/{id}", patientId)
+				.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
 				.retrieve()
 				.bodyToFlux(NotesDetailsDto.class)
 				.collectList()
@@ -32,8 +33,9 @@ public class NoteListController {
 
 		model.addAttribute("notes", notes);
 		
-		Risk risk = webClient.get()
-                .uri("http://localhost:8081/assessment/{id}", patientId)
+		Risk risk = webClient.get()				
+				.uri("http://localhost:8081/assessment/{id}", patientId)
+				.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
                 .retrieve()
                 .bodyToMono(Risk.class)
                 .block();
@@ -53,7 +55,7 @@ public class NoteListController {
 	@PostMapping("/add")
     public String saveNote(@ModelAttribute("noteDto") NotesDetailsDto noteDto, Model model) {
 		
-        webClient.post()
+		webClient.post()				
                 .uri("http://localhost:8081/notes")
                 .body(Mono.just(noteDto), NotesDetailsDto.class)
                 .retrieve()

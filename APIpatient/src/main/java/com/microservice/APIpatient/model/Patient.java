@@ -11,6 +11,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -41,8 +43,9 @@ public class Patient {
 	@Column(name = "gender")
 	private String gender;
 	
+	
 	@Column(name = "address")
-	private String address;
+    private String address;
 	
 	@Column(name = "phone_number")
 	private String phoneNumber;
@@ -102,7 +105,6 @@ public class Patient {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	
-	
 
+	
 }

@@ -35,14 +35,16 @@ public class AssessmentController {
      */
     @GetMapping("/{patientId}")
     public AssessmentResponse assess(@PathVariable String patientId) {
-        PatientDto patient = webClient.get()
+        PatientDto patient = webClient.get()       		
                 .uri("http://localhost:8081/patients/{id}", patientId)
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
                 .retrieve()
                 .bodyToMono(PatientDto.class)
                 .block();
 
-        List<NotesDto> notes = webClient.get()
-                .uri("http://localhost:8081/notes/{id}", patientId)
+        List<NotesDto> notes = webClient.get()         
+        		.uri("http://localhost:8081/notes/{id}", patientId)
+        		.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
                 .retrieve()
                 .bodyToFlux(NotesDto.class)
                 .collectList()

@@ -27,14 +27,16 @@ public class ListController {
 
 	@GetMapping("/list")
 	public String listPatient(Model model) {
-		List<PatientDetailsDto> patients = webClient.get()
+		
+		List<PatientDetailsDto> patients =  webClient.get()				
 				.uri("http://localhost:8081/patients")
+				.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
 				.retrieve()
 				.bodyToFlux(PatientDetailsDto.class)
 				.collectList()
 				.block();
-
-		model.addAttribute("patients", patients);
+        
+        model.addAttribute("patients", patients);
 
 		return "patient/list";
 	}
@@ -81,7 +83,9 @@ public class ListController {
 	    public String updatePatient(@ModelAttribute("patient") PatientDetailsDto patient, Model model) {
 	        logger.info("Updating patient with ID: {}", patient.getId());
 
-	        webClient.put().uri("http://localhost:8081/patients/{id}", patient.getId())
+	        webClient
+	        		.put().uri("http://localhost:8081/patients/{id}", patient.getId())
+	        		
 	                .body(Mono.just(patient), PatientDetailsDto.class)
 	                .retrieve()
 	                .bodyToMono(PatientDetailsDto.class)
