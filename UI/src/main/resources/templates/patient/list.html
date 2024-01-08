@@ -55,40 +55,41 @@
                 <tbody>
                     <tr th:each="patient : ${patients}">
                         <td style="text-align: center; vertical-align: middle">
-                            <span th:text="${patient.lastName}"> Lastname</span>
+                            <span th:text="${patient.lastName}">Lastname</span>
                         </td>
                         <td style="text-align: center; vertical-align: middle">
-                            <span th:text="${patient.firstName}"> Firstname</span>
+                            <span th:text="${patient.firstName}">Firstname</span>
                         </td>
                         <td style="text-align: center; vertical-align: middle">
-                            <span th:text="${patient.birthday}"> Birthdate</span>
+                            <span th:text="${patient.birthday}">Birthdate</span>
                         </td>
                         <td style="text-align: center; vertical-align: middle">
-                            <span th:text="${patient.gender}"> Gender</span>
+                            <span th:text="${patient.gender}">Gender</span>
                         </td>
                         <td style="text-align: center; vertical-align: middle">
-                            <span th:text="${patient.address}"> Address</span>
+                            <span th:text="${patient.address.address}">Address</span>
                         </td>
                         <td style="text-align: center; vertical-align: middle">
-                            <span th:text="${patient.phoneNumber}"> Phone</span>
+                            <span th:text="${patient.phoneNumber}">Phone</span>
                         </td>
                         <td class="text-center" style="width: 20%">
                             <div class="row">
                                 <div class="col">
                                     <a class="btn btn-secondary w-100 mb-2"
-                                    th:href="@{/history/{id}(id=${patient.id}, patId=${patient.id}, patient=${patient.lastName})}" >Notes</a>
+                                        th:href="@{/history/{id}(id=${patient.id}, patId=${patient.id}, patient=${patient.lastName})}">Notes</a>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <a class="btn btn-primary w-100" th:href="@{/patient/update/{id}(id=${patient.id},lastName=${patient.lastName},firstName=${patient.firstName},birthday=${patient.birthday},gender=${patient.gender},address=${patient.address},phoneNumber=${patient.phoneNumber})}">Edit</a>
+                                    <a class="btn btn-primary w-100"
+                                        th:href="@{/patient/update/{id}(id=${patient.id},lastName=${patient.lastName},firstName=${patient.firstName},birthday=${patient.birthday},gender=${patient.gender},address=${patient.address.address},phoneNumber=${patient.phoneNumber})}">Edit</a>
                                 </div>
-                                
                             </div>
-                        </td>                        
+                        </td>
                     </tr>
                 </tbody>
             </table>
+            
 
 
         </div>

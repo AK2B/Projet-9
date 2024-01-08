@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import com.microservice.UI.model.AddressDto;
 import com.microservice.UI.model.PatientDetailsDto;
 
 import reactor.core.publisher.Mono;
@@ -53,6 +51,9 @@ public class ListController {
 	@PostMapping("/add")
 	public String savepPatient(@ModelAttribute("patient") PatientDetailsDto patient, Model model) {
 
+        logger.info("patient test pour l'adresse: {}", patient.toString());
+
+		
 		webClient.post()
 				.uri("http://localhost:8081/patients")
 				.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
@@ -66,7 +67,7 @@ public class ListController {
 
 	@GetMapping("/update/{id}")
 	public String showUpdateForm(@PathVariable Long id, @RequestParam String lastName, @RequestParam String firstName,
-			@RequestParam String birthday, @RequestParam String gender, @RequestParam String address,
+			@RequestParam String birthday, @RequestParam String gender, @RequestParam AddressDto address,
 			@RequestParam String phoneNumber, Model model) {
 
 		PatientDetailsDto patientToUpdate = new PatientDetailsDto();

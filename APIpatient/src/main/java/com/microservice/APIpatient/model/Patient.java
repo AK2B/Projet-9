@@ -1,11 +1,8 @@
 package com.microservice.APIpatient.model;
 
-import java.time.LocalDate;
-
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,18 +32,17 @@ public class Patient {
 	private String firstName;
 
 	@NotNull(message = "Le champ ne peut pas être null.")
-	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "birthday")
-	private LocalDate birthday;
-	
+	private String birthday;
+
 	@NotNull(message = "Le champ ne peut pas être null.")
 	@Column(name = "gender")
 	private String gender;
-	
-	
-	@Column(name = "address")
-    private String address;
-	
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "address_id")
+	private Address address;
+
 	@Column(name = "phone_number")
 	private String phoneNumber;
 
@@ -74,11 +70,11 @@ public class Patient {
 		this.firstName = firstName;
 	}
 
-	public LocalDate getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(LocalDate birthday) {
+	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
 
@@ -90,13 +86,13 @@ public class Patient {
 		this.gender = gender;
 	}
 
-	public String getAddress() {
-		return address;
-	}
+	public Address getAddress() {
+        return address;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
 	public String getPhoneNumber() {
 		return phoneNumber;
@@ -106,5 +102,4 @@ public class Patient {
 		this.phoneNumber = phoneNumber;
 	}
 
-	
 }

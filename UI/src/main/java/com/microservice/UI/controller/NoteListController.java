@@ -65,7 +65,8 @@ public class NoteListController {
 
         model.addAttribute("patId", noteDto.getPatId());
 
-        return String.format("redirect:/history/%s", noteDto.getPatId());
+        return String.format("redirect:/history/%s?patId=%s&patient=%s", noteDto.getPatId(), noteDto.getPatId(), noteDto.getPatient());
+
     }
 	
 }

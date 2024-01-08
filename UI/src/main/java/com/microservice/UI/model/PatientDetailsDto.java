@@ -1,6 +1,5 @@
 package com.microservice.UI.model;
 
-
 public class PatientDetailsDto {
 
 	private Long id;
@@ -8,11 +7,11 @@ public class PatientDetailsDto {
 	private String firstName;
 	private String birthday;
 	private String gender;
-	private String address;
+	private AddressDto address;
 	private String phoneNumber;
 	
 	public PatientDetailsDto(Long id, String lastName, String firstName, String birthday, String gender,
-			String address, String phoneNumber) {
+			AddressDto address, String phoneNumber) {
 		super();
 		this.id = id;
 		this.lastName = lastName;
@@ -67,11 +66,11 @@ public class PatientDetailsDto {
 		this.gender = gender;
 	}
 
-	public String getAddress() {
+	public AddressDto getAddress() {
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(AddressDto address) {
 		this.address = address;
 	}
 
@@ -82,7 +81,18 @@ public class PatientDetailsDto {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	
+	@Override
+	public String toString() {
+	    return "PatientDetailsDto{" +
+	            "id=" + id +
+	            ", lastName='" + lastName + '\'' +
+	            ", firstName='" + firstName + '\'' +
+	            ", birthday='" + birthday + '\'' +
+	            ", gender='" + gender + '\'' +
+	            ", address=" + address.toString() + // Appel de toString() sur l'objet AddressDto
+	            ", phoneNumber='" + phoneNumber + '\'' +
+	            '}';
+	}
 	
 
 }
