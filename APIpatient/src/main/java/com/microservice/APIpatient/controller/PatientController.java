@@ -16,15 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.microservice.APIpatient.model.Patient;
 import com.microservice.APIpatient.service.PatientService;
 
-
 @RestController
 @RequestMapping("/patients")
 public class PatientController {
-    
-    private PatientService patientService;
+
+    private final PatientService patientService;
 
     public PatientController(PatientService patientService) {
-        super();
         this.patientService = patientService;
     }
 
@@ -36,16 +34,12 @@ public class PatientController {
     @GetMapping("/{id}")
     public ResponseEntity<Patient> getPatientById(@PathVariable Long id) {
         Patient patient = patientService.getPatientById(id);
-        if (patient != null) {
-            return ResponseEntity.ok(patient);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return patient != null ? ResponseEntity.ok(patient) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
     public ResponseEntity<Patient> savePatient(@RequestBody Patient patient) {
-        Patient savedPatient = patientService.savePatient(patient);
+        Patient savedPatient = patientService.savePatientWithAddress(patient);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedPatient);
     }
 

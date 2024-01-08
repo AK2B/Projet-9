@@ -83,7 +83,7 @@ public class PatientControllerTest {
     public void testSavePatient() {
         // Arrange
         Patient patient = new Patient();
-        when(patientService.savePatient(patient)).thenReturn(patient);
+        when(patientService.savePatientWithAddress(patient)).thenReturn(patient);
 
         // Act
         ResponseEntity<Patient> result = patientController.savePatient(patient);

@@ -70,7 +70,7 @@ public class PatientServiceTest {
         when(patientRepository.save(patient)).thenReturn(patient);
 
         // Act
-        Patient result = patientService.savePatient(patient);
+        Patient result = patientService.savePatientWithAddress(patient);
 
         // Assert
         assertNotNull(result);

@@ -12,20 +12,21 @@ import jakarta.persistence.Table;
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "address")
     private String address;
 
+	public Address() {
+		super();
+	}
+
 	public Address(Long id, String address) {
 		super();
 		this.id = id;
 		this.address = address;
-	}
-
-	public Address() {
-		
 	}
 
 	public Long getId() {
@@ -43,6 +44,5 @@ public class Address {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-
-    
+        
 }

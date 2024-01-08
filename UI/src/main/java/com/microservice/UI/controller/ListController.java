@@ -11,10 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.microservice.UI.model.AddressDto;
 import com.microservice.UI.model.PatientDetailsDto;
 
 import reactor.core.publisher.Mono;
@@ -22,8 +20,8 @@ import reactor.core.publisher.Mono;
 @Controller
 @RequestMapping("/patient")
 public class ListController {
+	
     private static final Logger logger = LoggerFactory.getLogger(ListController.class);
-
 	private final WebClient webClient = WebClient.create();
 
 	@GetMapping("/list")
@@ -43,61 +41,56 @@ public class ListController {
 	}
 
 	@GetMapping("/add")
-	public String addPatient() {
-
+	public String addPatient(Model model) {
+		model.addAttribute("patient", new PatientDetailsDto());
 		return "patient/add";
 	}
 
-	@PostMapping("/add")
-	public String savepPatient(@ModelAttribute("patient") PatientDetailsDto patient, Model model) {
+	 @PostMapping("/add")
+	    public String savePatient(@ModelAttribute("patient") PatientDetailsDto patient, Model model) {
+	        logger.info("Patient details received: {}", patient.toString());
 
-        logger.info("patient test pour l'adresse: {}", patient.toString());
+	        webClient.post()
+	                .uri("http://localhost:8081/patients")
+	                .headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
+	                .body(Mono.just(patient), PatientDetailsDto.class)
+	                .retrieve()
+	                .bodyToMono(PatientDetailsDto.class)
+	                .doOnSuccess(updatedPatient -> logger.info("Patient added successfully: {}", updatedPatient))
+	                .block();
 
-		
-		webClient.post()
-				.uri("http://localhost:8081/patients")
-				.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
-				.body(Mono.just(patient), PatientDetailsDto.class)
-				.retrieve()
-				.bodyToMono(PatientDetailsDto.class)
-				.block();
+	        return "redirect:/patient/list";
+	    }
 
-		return "redirect:/patient/list";
-	}
+	 @GetMapping("/update/{id}")
+	    public String showUpdateForm(@PathVariable Long id, Model model) {
+	        PatientDetailsDto patientToUpdate = webClient.get()
+	                .uri("http://localhost:8081/patients/{id}", id)
+	                .headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
+	                .retrieve()
+	                .bodyToMono(PatientDetailsDto.class)
+	                .block();
 
-	@GetMapping("/update/{id}")
-	public String showUpdateForm(@PathVariable Long id, @RequestParam String lastName, @RequestParam String firstName,
-			@RequestParam String birthday, @RequestParam String gender, @RequestParam AddressDto address,
-			@RequestParam String phoneNumber, Model model) {
+	        model.addAttribute("patient", patientToUpdate);
 
-		PatientDetailsDto patientToUpdate = new PatientDetailsDto();
-		patientToUpdate.setId(id);
-		patientToUpdate.setLastName(lastName);
-		patientToUpdate.setFirstName(firstName);
-		patientToUpdate.setBirthday(birthday);
-		patientToUpdate.setGender(gender);
-		patientToUpdate.setAddress(address);
-		patientToUpdate.setPhoneNumber(phoneNumber);
+	        return "patient/update";
+	    }
 
-		model.addAttribute("patient", patientToUpdate);
+	    @PostMapping("/update")
+	    public String updatePatient(@ModelAttribute("patient") PatientDetailsDto patient, Model model) {
+	        logger.info("Updating patient with ID: {}", patient.getId());
 
-		return "patient/update";
-	}
+	        webClient.put()
+	                .uri("http://localhost:8081/patients/{id}", patient.getId())
+	                .headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
+	                .body(Mono.just(patient), PatientDetailsDto.class)
+	                .retrieve()
+	                .bodyToMono(PatientDetailsDto.class)
+	                .doOnSuccess(updatedPatient -> logger.info("Patient updated successfully: {}", updatedPatient))
+	                .block();
 
-	@PostMapping("/update")
-    public String updatePatient(@ModelAttribute("patient") PatientDetailsDto patient, Model model) {
-        logger.info("Updating patient with ID: {}", patient.getId());
+	        return "redirect:/patient/list";
+	    }
 
-        webClient
-        		.put().uri("http://localhost:8081/patients/{id}", patient.getId())
-				.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
-                .body(Mono.just(patient), PatientDetailsDto.class)
-                .retrieve()
-                .bodyToMono(PatientDetailsDto.class)
-                .doOnSuccess(updatedPatient -> logger.info("Patient updated successfully: {}", updatedPatient))
-                .block();
-
-	return "redirect:/patient/list";
-}
 
 }

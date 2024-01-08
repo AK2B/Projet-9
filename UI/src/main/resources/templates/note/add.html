@@ -36,7 +36,7 @@
                     <div class="col-3">
                     </div>
                     <div class="col-3 d-flex justify-content-end">
-                        <a class="btn btn-warning w-50 mb-3" th:href="@{/history/{patId}(patId=${param.patId})}">Back</a>
+                        <a class="btn btn-warning w-50 mb-3" th:href="@{/history/{id}(id=${param.patId}, patId=${param.patId}, patient=${param.patient})}">Back</a>
                     </div>
                 </div>
                 <form th:object="${noteDto}" th:action="@{/history/add}" method="post">

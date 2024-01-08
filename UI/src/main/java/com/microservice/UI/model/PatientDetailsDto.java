@@ -2,29 +2,27 @@ package com.microservice.UI.model;
 
 public class PatientDetailsDto {
 
-	private Long id;
-	private String lastName;
-	private String firstName;
-	private String birthday;
-	private String gender;
-	private AddressDto address;
-	private String phoneNumber;
-	
-	public PatientDetailsDto(Long id, String lastName, String firstName, String birthday, String gender,
-			AddressDto address, String phoneNumber) {
-		super();
-		this.id = id;
-		this.lastName = lastName;
-		this.firstName = firstName;
-		this.birthday = birthday;
-		this.gender = gender;
-		this.address = address;
-		this.phoneNumber = phoneNumber;
-	}
+    private Long id;
+    private String lastName;
+    private String firstName;
+    private String birthday;
+    private String gender;
+    private AddressDto address;
+    private String phoneNumber;
 
-	public PatientDetailsDto() {
-		
-	}
+    public PatientDetailsDto(Long id, String lastName, String firstName, String birthday, String gender,
+                             AddressDto address, String phoneNumber) {
+        this.id = id;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.birthday = birthday;
+        this.gender = gender;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public PatientDetailsDto() {
+    }
 
 	public Long getId() {
 		return id;
@@ -81,18 +79,17 @@ public class PatientDetailsDto {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	@Override
-	public String toString() {
-	    return "PatientDetailsDto{" +
-	            "id=" + id +
-	            ", lastName='" + lastName + '\'' +
-	            ", firstName='" + firstName + '\'' +
-	            ", birthday='" + birthday + '\'' +
-	            ", gender='" + gender + '\'' +
-	            ", address=" + address.toString() + // Appel de toString() sur l'objet AddressDto
-	            ", phoneNumber='" + phoneNumber + '\'' +
-	            '}';
-	}
 	
-
+	 @Override
+	    public String toString() {
+	        return "PatientDetailsDto{" +
+	                "id=" + id +
+	                ", lastName='" + lastName + '\'' +
+	                ", firstName='" + firstName + '\'' +
+	                ", birthday='" + birthday + '\'' +
+	                ", gender='" + gender + '\'' +
+	                ", address=" + (address != null ? address.toString() : "null") +  
+	                ", phoneNumber='" + phoneNumber + '\'' +
+	                '}';
+	    }
 }
