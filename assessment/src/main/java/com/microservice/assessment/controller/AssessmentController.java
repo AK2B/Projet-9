@@ -3,6 +3,7 @@ package com.microservice.assessment.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,12 @@ public class AssessmentController {
     
     private final WebClient webClient = WebClient.create();
 
+    @Value("${note.api.base-url}")
+    private String noteApiBaseUrl;
+    
+    @Value("${patient.api.base-url}")
+	private String patientApiBaseUrl;
+    
     /**
      * Endpoint for assessing the diabetes risk of a patient.
      *
@@ -36,14 +43,14 @@ public class AssessmentController {
     @GetMapping("/{patientId}")
     public AssessmentResponse assess(@PathVariable String patientId) {
         PatientDto patient = webClient.get()       		
-                .uri("http://localhost:8081/patients/{id}", patientId)
+                .uri(patientApiBaseUrl + "/patients/{id}", patientId)
                 .headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
                 .retrieve()
                 .bodyToMono(PatientDto.class)
                 .block();
 
         List<NotesDto> notes = webClient.get()         
-        		.uri("http://localhost:8081/notes/{id}", patientId)
+        		.uri(noteApiBaseUrl + "/notes/{id}", patientId)
         		.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
                 .retrieve()
                 .bodyToFlux(NotesDto.class)

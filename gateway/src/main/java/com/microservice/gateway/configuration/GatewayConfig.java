@@ -12,11 +12,11 @@ public class GatewayConfig {
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
             .route("patient-service", r -> r.path("/patients/**")
-                .uri("http://localhost:8082"))  
+                .uri("http://apipatient:8082"))  
             .route("notes-service", r -> r.path("/notes/**")
-                .uri("http://localhost:8083"))    
+                .uri("http://notes:8083"))    
             .route("assessment-service", r -> r.path("/assessment/**")
-                .uri("http://localhost:8084")) 
+                .uri("http://assessment:8084"))  
             .build();
     }
 }
