@@ -17,6 +17,8 @@ public class GatewayConfig {
                 .uri("http://notes:8083"))    
             .route("assessment-service", r -> r.path("/assessment/**")
                 .uri("http://assessment:8084"))  
+            .route("ui-service", r -> r.path("/ui/**")
+                    .uri("http://ui:8080"))
             .build();
     }
 }

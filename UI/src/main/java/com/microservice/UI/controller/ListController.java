@@ -25,13 +25,13 @@ public class ListController {
 	private static final Logger logger = LoggerFactory.getLogger(ListController.class);
 	private final WebClient webClient = WebClient.create();
 
-	@Value("${patient.api.base-url}")
-	private String patientApiBaseUrl;
+	@Value("${api.base-url}")
+	private String apiBaseUrl;
 
 	@GetMapping("/list")
 	public String listPatient(Model model) {
 
-		List<PatientDetailsDto> patients = webClient.get().uri(patientApiBaseUrl + "/patients")
+		List<PatientDetailsDto> patients = webClient.get().uri(apiBaseUrl + "/patients")
 				.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password")).retrieve()
 				.bodyToFlux(PatientDetailsDto.class).collectList().block();
 
@@ -50,7 +50,7 @@ public class ListController {
 	public String savePatient(@ModelAttribute("patient") PatientDetailsDto patient, Model model) {
 		logger.info("Patient details received: {}", patient.toString());
 
-		webClient.post().uri(patientApiBaseUrl + "/patients")
+		webClient.post().uri(apiBaseUrl + "/patients")
 				.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
 				.body(Mono.just(patient), PatientDetailsDto.class).retrieve().bodyToMono(PatientDetailsDto.class)
 				.doOnSuccess(updatedPatient -> logger.info("Patient added successfully: {}", updatedPatient)).block();
@@ -60,7 +60,7 @@ public class ListController {
 
 	@GetMapping("/update/{id}")
 	public String showUpdateForm(@PathVariable Long id, Model model) {
-		PatientDetailsDto patientToUpdate = webClient.get().uri(patientApiBaseUrl + "/patients/{id}", id)
+		PatientDetailsDto patientToUpdate = webClient.get().uri(apiBaseUrl + "/patients/{id}", id)
 				.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password")).retrieve()
 				.bodyToMono(PatientDetailsDto.class).block();
 
@@ -73,7 +73,7 @@ public class ListController {
 	public String updatePatient(@ModelAttribute("patient") PatientDetailsDto patient, Model model) {
 		logger.info("Updating patient with ID: {}", patient.getId());
 
-		webClient.put().uri(patientApiBaseUrl + "/patients/{id}", patient.getId())
+		webClient.put().uri(apiBaseUrl + "/patients/{id}", patient.getId())
 				.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
 				.body(Mono.just(patient), PatientDetailsDto.class).retrieve().bodyToMono(PatientDetailsDto.class)
 				.doOnSuccess(updatedPatient -> logger.info("Patient updated successfully: {}", updatedPatient)).block();

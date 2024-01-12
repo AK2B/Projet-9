@@ -1,3 +1,4 @@
 FROM openjdk:17-jdk-alpine
-COPY target/*.jar ui-0.2.0-SNAPSHOT.jar
-ENTRYPOINT ["java","-jar","/ui-0.2.0-SNAPSHOT.jar"]
+COPY target/UI-0.0.1-SNAPSHOT.jar .
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "UI-0.0.1-SNAPSHOT.jar"]

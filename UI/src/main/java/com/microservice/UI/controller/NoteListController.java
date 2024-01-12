@@ -2,6 +2,7 @@ package com.microservice.UI.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,16 +23,13 @@ public class NoteListController {
 
 	private final WebClient webClient = WebClient.create();
 	
-	@Value("${note.api.base-url}")
-    private String noteApiBaseUrl;
-	
-	@Value("${note.api.base-url}")
-    private String assessmentApiBaseUrl;
+	@Value("${api.base-url}")
+    private String apiBaseUrl;
 	
 	@GetMapping("/{patientId}")
 	public String listPatient(@PathVariable String patientId, Model model) {
 		List<NotesDetailsDto> notes = webClient.get()
-				.uri(noteApiBaseUrl + "/notes/{id}", patientId)
+				.uri(apiBaseUrl + "/notes/{id}", patientId)
 				.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
 				.retrieve()
 				.bodyToFlux(NotesDetailsDto.class)
@@ -41,7 +39,7 @@ public class NoteListController {
 		model.addAttribute("notes", notes);
 		
 		Risk risk = webClient.get()				
-				.uri(assessmentApiBaseUrl + "/assessment/{id}", patientId)
+				.uri(apiBaseUrl + "/assessment/{id}", patientId)
 				.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
                 .retrieve()
                 .bodyToMono(Risk.class)
@@ -60,20 +58,31 @@ public class NoteListController {
 
 	
 	@PostMapping("/add")
-    public String saveNote(@ModelAttribute("noteDto") NotesDetailsDto noteDto, Model model) {
-		
-		webClient.post()				
-                .uri(noteApiBaseUrl + "/notes")
-				.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
-                .body(Mono.just(noteDto), NotesDetailsDto.class)
-                .retrieve()
-                .bodyToMono(NotesDetailsDto.class)
-                .block();
+	public String saveNote(@ModelAttribute("noteDto") NotesDetailsDto noteDto, Model model) {
 
-        model.addAttribute("patId", noteDto.getPatId());
+	    ResponseEntity<Void> response = webClient.get()
+	            .uri(apiBaseUrl + "/patients/{id}", noteDto.getPatId())
+	            .headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
+	            .retrieve()
+	            .toBodilessEntity()
+	            .block();
 
-        return String.format("redirect:/history/%s?patId=%s&patient=%s", noteDto.getPatId(), noteDto.getPatId(), noteDto.getPatient());
+	    if (response.getStatusCode().isError()) {
+	        return "redirect:/noteError";
+	    }
 
-    }
+	    webClient.post()
+	            .uri(apiBaseUrl + "/notes")
+	            .headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
+	            .body(Mono.just(noteDto), NotesDetailsDto.class)
+	            .retrieve()
+	            .bodyToMono(NotesDetailsDto.class)
+	            .block();
+
+	    model.addAttribute("patId", noteDto.getPatId());
+
+	    return String.format("redirect:/history/%s?patId=%s&patient=%s", noteDto.getPatId(), noteDto.getPatId(), noteDto.getPatient());
+	}
+
 	
 }

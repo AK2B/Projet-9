@@ -1,3 +1,4 @@
+-- init.sql
 DROP DATABASE IF EXISTS medicalpatient;
 
 CREATE DATABASE medicalpatient;
@@ -6,18 +7,18 @@ USE medicalpatient;
 
 -- Création de la table 'address'
 CREATE TABLE `address` (
-  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `address` VARCHAR(100)
 );
 
 -- Création de la table 'patient'
 CREATE TABLE `patient` (
-  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `last_name` VARCHAR(50) NOT NULL,
   `first_name` VARCHAR(50) NOT NULL,
   `birthday` DATE NOT NULL,
   `gender` CHAR(1) NOT NULL,
-  `address_id` INT,
+  `address_id` BIGINT,
   `phone_number` VARCHAR(15),
   CONSTRAINT `fk_patient_address` FOREIGN KEY (`address_id`) REFERENCES `address`(`id`)
 );

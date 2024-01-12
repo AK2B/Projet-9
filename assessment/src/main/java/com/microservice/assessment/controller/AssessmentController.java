@@ -27,12 +27,9 @@ public class AssessmentController {
     private AssessmentService assessmentService;
     
     private final WebClient webClient = WebClient.create();
-
-    @Value("${note.api.base-url}")
-    private String noteApiBaseUrl;
     
-    @Value("${patient.api.base-url}")
-	private String patientApiBaseUrl;
+    @Value("${api.base-url}")
+	private String apiBaseUrl;
     
     /**
      * Endpoint for assessing the diabetes risk of a patient.
@@ -43,14 +40,14 @@ public class AssessmentController {
     @GetMapping("/{patientId}")
     public AssessmentResponse assess(@PathVariable String patientId) {
         PatientDto patient = webClient.get()       		
-                .uri(patientApiBaseUrl + "/patients/{id}", patientId)
+                .uri(apiBaseUrl + "/patients/{id}", patientId)
                 .headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
                 .retrieve()
                 .bodyToMono(PatientDto.class)
                 .block();
 
         List<NotesDto> notes = webClient.get()         
-        		.uri(noteApiBaseUrl + "/notes/{id}", patientId)
+        		.uri(apiBaseUrl + "/notes/{id}", patientId)
         		.headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
                 .retrieve()
                 .bodyToFlux(NotesDto.class)

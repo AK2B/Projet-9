@@ -39,7 +39,7 @@
 
 
         <!-- Table of patients -->
-        <div class="row mt-2">
+        <div th:if="${patients.size() > 0}" class="row mt-2">
             <table class="table table-bordered">
                 <thead class="bg-light">
                     <tr>
