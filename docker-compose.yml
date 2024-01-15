@@ -1,12 +1,5 @@
 version: "3.9"
 
-networks:
-  mysql-network:
-    external: true
-
-  mongodb-network:
-    external: true
-
 services:
 
   mysql:
@@ -18,10 +11,10 @@ services:
       - MYSQL_ROOT_PASSWORD=mauFJcuf5dhRMQrjj
       - MYSQL_DATABASE=medicalpatient
     ports:
-      - '3308:3308'
-
-    networks:
-      - mysql-network
+      - '3307:3307'
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - /init.sql:/docker-entrypoint-initdb.d/init.sql  
 
   mongodb_container:
     image: mongo:6.0.2
@@ -31,8 +24,6 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=test@1234
     ports:
       - 27017:27017
-    networks:
-      - mongodb-network
 
   apipatient:
     build: ./apipatient
@@ -40,10 +31,11 @@ services:
     ports:
       - "8082:8082"
     environment:
+      - MYSQL_HOST=mysql:3307
       - MYSQL_ROOT_PASSWORD=mauFJcuf5dhRMQrjj
       - MYSQL_DATABASE=medicalpatient
-    networks:
-      - mysql-network
+    depends_on:
+      - mysql
 
   notes:
     build: ./notes
@@ -54,8 +46,6 @@ services:
       - MONGO_DATABASE=medilab
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=test@1234
-    networks:
-      - mongodb-network
     depends_on:
       - apipatient
 
@@ -64,9 +54,6 @@ services:
     restart: always
     ports:
       - "8084:8084"
-    networks:
-      - mysql-network
-      - mongodb-network
     depends_on:
       - notes
 
@@ -75,8 +62,6 @@ services:
     restart: always
     ports:
       - "8080:8080"
-    networks:
-      - mysql-network
     depends_on:
       - assessment
 
@@ -85,11 +70,8 @@ services:
     restart: always
     ports:
       - "8081:8081"
-    networks:
-      - mongodb-network
     depends_on:
       - ui
-
 
 volumes:
   mysql-data:

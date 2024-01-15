@@ -20,11 +20,10 @@ public class Address {
     private String address;
 
 	public Address() {
-		super();
 	}
 
 	public Address(Long id, String address) {
-		super();
+		
 		this.id = id;
 		this.address = address;
 	}

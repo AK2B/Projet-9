@@ -1,6 +1,6 @@
 package com.microservice.APIpatient.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,43 +16,40 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "patient")
 public class Patient {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
 
-    @NotNull(message = "Le champ ne peut pas être null.")
-    @Column(name = "last_name")
-    private String lastName;
+	@NotNull(message = "Le champ ne peut pas être null.")
+	@Column(name = "last_name")
+	private String lastName;
 
-    @NotNull(message = "Le champ ne peut pas être null.")
-    @Column(name = "first_name")
-    private String firstName;
+	@NotNull(message = "Le champ ne peut pas être null.")
+	@Column(name = "first_name")
+	private String firstName;
 
-    @NotNull(message = "Le champ ne peut pas être null.")
-    @Column(name = "birthday")
-    private Date birthday;
+	@NotNull(message = "Le champ ne peut pas être null.")
+	@Column(name = "birthday")
+	private LocalDate birthday;
 
-    @NotNull(message = "Le champ ne peut pas être null.")
-    @Column(name = "gender")
-    private String gender;
+	@NotNull(message = "Le champ ne peut pas être null.")
+	@Column(name = "gender")
+	private String gender;
 
-    @ManyToOne
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private Address address;
+	@ManyToOne
+	@JoinColumn(name = "address_id", referencedColumnName = "id")
+	private Address address;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
-      
+	@Column(name = "phone_number")
+	private String phoneNumber;
+
 	public Patient() {
-		super();
 	}
 
-	public Patient(Long id, @NotNull(message = "Le champ ne peut pas être null.") String lastName,
-			@NotNull(message = "Le champ ne peut pas être null.") String firstName,
-			@NotNull(message = "Le champ ne peut pas être null.") Date birthday,
-			@NotNull(message = "Le champ ne peut pas être null.") String gender, Address address, String phoneNumber) {
-		super();
+	public Patient(Long id, String lastName, String firstName, LocalDate birthday, String gender, Address address,
+			String phoneNumber) {
+		
 		this.id = id;
 		this.lastName = lastName;
 		this.firstName = firstName;
@@ -86,11 +83,11 @@ public class Patient {
 		this.firstName = firstName;
 	}
 
-	public Date getBirthday() {
+	public LocalDate getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(Date birthday) {
+	public void setBirthday(LocalDate birthday) {
 		this.birthday = birthday;
 	}
 
@@ -117,7 +114,5 @@ public class Patient {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-    
-    
-    
+
 }

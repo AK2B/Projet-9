@@ -8,17 +8,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GatewayConfig {
 
-    @Bean
-    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
-        return builder.routes()
-            .route("patient-service", r -> r.path("/patients/**")
-                .uri("http://apipatient:8082"))  
-            .route("notes-service", r -> r.path("/notes/**")
-                .uri("http://notes:8083"))    
-            .route("assessment-service", r -> r.path("/assessment/**")
-                .uri("http://assessment:8084"))  
-            .route("ui-service", r -> r.path("/ui/**")
-                    .uri("http://ui:8080"))
-            .build();
-    }
+	  @Bean
+	    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
+	        return builder.routes()
+	            .route("patient-service", r -> r.path("/patients/**")
+	                .uri("http://localhost:8082"))  
+	            .route("notes-service", r -> r.path("/notes/**")
+	                .uri("http://localhost:8083"))    
+	            .route("assessment-service", r -> r.path("/assessment/**")
+	                .uri("http://localhost:8084")) 
+	            .build();
+	    }
 }
